@@ -45,3 +45,4 @@
 
 #include "target.h"
 
+#define QUAD_TILT

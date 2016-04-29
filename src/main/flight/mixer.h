@@ -55,7 +55,8 @@ typedef enum mixerMode
     MIXER_ATAIL4 = 22,
     MIXER_CUSTOM = 23,
     MIXER_CUSTOM_AIRPLANE = 24,
-    MIXER_CUSTOM_TRI = 25
+    MIXER_CUSTOM_TRI = 25,
+    MIXER_QUAD_TILT = 26
 } mixerMode_e;
 
 // Custom mixer data per motor
@@ -141,6 +142,11 @@ typedef enum {
     SERVO_SINGLECOPTER_2 = 4,
     SERVO_SINGLECOPTER_3 = 5,
     SERVO_SINGLECOPTER_4 = 6,
+    
+    SERVO_QUAD_TILT_1 = 0,
+    SERVO_QUAD_TILT_2 = 1,
+    SERVO_QUAD_TILT_3 = 2,
+    SERVO_QUAD_TILT_4 = 3,
 
 } servoIndex_e; // FIXME rename to servoChannel_e
 
@@ -155,6 +161,9 @@ typedef enum {
 
 #define SERVO_FLAPPERONS_MIN SERVO_FLAPPERON_1
 #define SERVO_FLAPPERONS_MAX SERVO_FLAPPERON_2
+
+#define SERVO_QUAD_TILT_INDEX_MIN SERVO_QUAD_TILT_1
+#define SERVO_QUAD_TILT_INDEX_MAX SERVO_QUAD_TILT_4
 
 typedef struct servoMixer_s {
     uint8_t targetChannel;                  // servo that receives the output of the rule
@@ -229,3 +238,5 @@ void writeMotors(void);
 void stopMotors(void);
 void StopPwmAllMotors(void);
 void mixerInitialiseServoFiltering(uint32_t targetLooptime);
+void motorServoCompensation(void);
+void servoTiltMixer(void);

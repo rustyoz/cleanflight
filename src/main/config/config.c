@@ -80,6 +80,7 @@
 
 #define BRUSHED_MOTORS_PWM_RATE 16000
 #define BRUSHLESS_MOTORS_PWM_RATE 400
+#define DIGITAL_SERVO_PWM_RATE 400
 
 void useRcControlsConfig(modeActivationCondition_t *modeActivationConditions, escAndServoConfig_t *escAndServoConfigToUse, pidProfile_t *pidProfileToUse);
 
@@ -420,7 +421,7 @@ STATIC_UNIT_TESTED void resetConf(void)
 #else
     masterConfig.motor_pwm_rate = BRUSHLESS_MOTORS_PWM_RATE;
 #endif
-    masterConfig.servo_pwm_rate = 50;
+    masterConfig.servo_pwm_rate = DIGITAL_SERVO_PWM_RATE;
 
 #ifdef GPS
     // gps/nav stuff

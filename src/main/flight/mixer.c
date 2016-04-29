@@ -236,6 +236,7 @@ const mixer_t mixers[] = {
     { 0, false, NULL },                // MIXER_CUSTOM
     { 2, true,  NULL },                // MIXER_CUSTOM_AIRPLANE
     { 3, true,  NULL },                // MIXER_CUSTOM_TRI
+    { 4, true, mixerQuadX}             // MIXER_QUAD_TILT
 };
 #endif
 
@@ -291,6 +292,23 @@ static const servoMixer_t servoMixerGimbal[] = {
     { SERVO_GIMBAL_ROLL, INPUT_GIMBAL_ROLL,  125, 0, 0, 100, 0 },
 };
 
+#define QUAD_SERVO_RATE_ROLL 50
+#define QUAD_SERVO_RATE_PITCH 50
+#define QUAD_SERVO_RATE_YAW 50
+static const servoMixer_t servoMixerQuadTilt[] = {
+    { SERVO_QUAD_TILT_1, INPUT_STABILIZED_YAW,  QUAD_SERVO_RATE_YAW, 0, 0, 100, 0 },
+    { SERVO_QUAD_TILT_2, INPUT_STABILIZED_YAW,  QUAD_SERVO_RATE_YAW, 0, 0, 100, 0 },
+    { SERVO_QUAD_TILT_3, INPUT_STABILIZED_YAW,  QUAD_SERVO_RATE_YAW, 0, 0, 100, 0 },
+    { SERVO_QUAD_TILT_4, INPUT_STABILIZED_YAW,  QUAD_SERVO_RATE_YAW, 0, 0, 100, 0 },
+    { SERVO_QUAD_TILT_1, INPUT_STABILIZED_ROLL,    QUAD_SERVO_RATE_ROLL, 0, 0, 100, 0 },
+    { SERVO_QUAD_TILT_2, INPUT_STABILIZED_ROLL,   -QUAD_SERVO_RATE_ROLL, 0, 0, 100, 0 },
+    { SERVO_QUAD_TILT_3, INPUT_STABILIZED_ROLL,    QUAD_SERVO_RATE_ROLL, 0, 0, 100, 0 },
+    { SERVO_QUAD_TILT_4, INPUT_STABILIZED_ROLL,   -QUAD_SERVO_RATE_ROLL, 0, 0, 100, 0 },
+    { SERVO_QUAD_TILT_1, INPUT_STABILIZED_PITCH,  QUAD_SERVO_RATE_PITCH, 0, 0, 100, 0 },
+    { SERVO_QUAD_TILT_2, INPUT_STABILIZED_PITCH,  QUAD_SERVO_RATE_PITCH, 0, 0, 100, 0 },
+    { SERVO_QUAD_TILT_3, INPUT_STABILIZED_PITCH,   -QUAD_SERVO_RATE_PITCH, 0, 0, 100, 0 },
+    { SERVO_QUAD_TILT_4, INPUT_STABILIZED_PITCH,   -QUAD_SERVO_RATE_PITCH, 0, 0, 100, 0 },
+};
 
 const mixerRules_t servoMixers[] = {
     { 0, NULL },                // entry 0
@@ -319,6 +337,7 @@ const mixerRules_t servoMixers[] = {
     { 0, NULL },                // MULTITYPE_CUSTOM
     { 0, NULL },                // MULTITYPE_CUSTOM_PLANE
     { 0, NULL },                // MULTITYPE_CUSTOM_TRI
+    { COUNT_SERVO_RULES(servoMixerQuadTilt), servoMixerQuadTilt },    // MULTITYPE_QUADTILT
 };
 
 static servoMixer_t *customServoMixers;
@@ -618,6 +637,12 @@ void writeServos(void)
 
         case MIXER_SINGLECOPTER:
             for (int i = SERVO_SINGLECOPTER_INDEX_MIN; i <= SERVO_SINGLECOPTER_INDEX_MAX; i++) {
+                pwmWriteServo(servoIndex++, servo[i]);
+            }
+            break;
+            
+        case MIXER_QUAD_TILT:
+            for (int i = SERVO_QUAD_TILT_INDEX_MIN; i <= SERVO_QUAD_TILT_INDEX_MAX; i++) {
                 pwmWriteServo(servoIndex++, servo[i]);
             }
             break;
@@ -943,7 +968,9 @@ void mixTable(void)
         case MIXER_GIMBAL:
             servoMixer();
             break;
-
+        case MIXER_QUAD_TILT:
+            servoTiltMixer();
+            //motorServoCompensation();
         /*
         case MIXER_GIMBAL:
 			servo[SERVO_GIMBAL_PITCH] = (((int32_t)servoConf[SERVO_GIMBAL_PITCH].rate * attitude.values.pitch) / 50) + determineServoMiddleOrForwardFromChannel(SERVO_GIMBAL_PITCH);
@@ -1010,3 +1037,38 @@ void filterServos(void)
 #endif
 }
 
+// Compensate motor thrusts based on servo angles.
+void motorServoCompensation(void) {
+    uint8_t i;
+    for(i = SERVO_QUAD_TILT_INDEX_MIN; i < SERVO_QUAD_TILT_INDEX_MAX+1; i++){
+     uint16_t servo_dev = ABS(servo[i]-servoConf[i].middle);
+     uint16_t servo_width = servoConf[i].max - servoConf[i].min;
+     uint16_t servo_angle_range = servoConf[i].angleAtMax + servoConf[i].angleAtMin;
+     float angle = ((float)servo_dev/(float)servo_width)*servo_angle_range;
+     float compensation = 1.0/cos(angle);
+     motor[i-SERVO_QUAD_TILT_INDEX_MIN] *= compensation;
+    }
+    
+    int16_t maxMotor = 0;
+    int16_t maxThrottleDifference = 0;
+        if (maxMotor > escAndServoConfig->maxthrottle) {
+            maxThrottleDifference = maxMotor - escAndServoConfig->maxthrottle;
+        }
+
+        for (i = 0; i < motorCount; i++) {
+            // this is a way to still have good gyro corrections if at least one motor reaches its max.
+            motor[i] -= maxThrottleDifference;
+            }
+}
+
+void servoTiltMixer(void) {
+	if (IS_RC_MODE_ACTIVE(BOXQUADTILT)) {
+		servoMixer(); // mix servos as per rules
+	} else {
+        uint8_t i;
+		for (i = SERVO_QUAD_TILT_INDEX_MIN; i <= SERVO_QUAD_TILT_INDEX_MAX; i++) {
+			servo[i] = determineServoMiddleOrForwardFromChannel(i); // set servo to centre value. 
+		}
+		return;
+	}
+}

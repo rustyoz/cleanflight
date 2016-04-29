@@ -140,6 +140,7 @@ static const box_t boxes[CHECKBOX_ITEM_COUNT + 1] = {
     { BOXBLACKBOX, "BLACKBOX;", 26 },
     { BOXFAILSAFE, "FAILSAFE;", 27 },
     { BOXAIRMODE, "AIR MODE;", 28 },
+    { BOXQUADTILT, "QUADTILT;", 29 },
     { CHECKBOX_ITEM_COUNT, NULL, 0xFF }
 };
 
@@ -537,6 +538,13 @@ void mspInit(serialConfig_t *serialConfig)
 #ifdef GTUNE
     activeBoxIds[activeBoxIdCount++] = BOXGTUNE;
 #endif
+
+#ifdef QUAD_TILT
+    if (masterConfig.mixerMode == MIXER_QUAD_TILT) {
+        activeBoxIds[activeBoxIdCount++] = BOXQUADTILT;
+    }
+#endif
+
 
     memset(mspPorts, 0x00, sizeof(mspPorts));
     mspAllocateSerialPorts(serialConfig);
