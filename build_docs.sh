@@ -7,7 +7,6 @@ doc_files=(
 	'Safety.md'
 	'Installation.md'
 	'Configuration.md'
-	'Cli.md'
 	'Serial.md'
 	'Rx.md'
 	'Spektrum bind.md'
@@ -36,11 +35,12 @@ doc_files=(
     'Board - RMDO.md'
     'Board - Naze32.md'
     'Board - Paris Air Hero 32.md'
-    'Board - AlienWii32.md'
+    'Board - AlienFlight.md'
     'Board - CC3D.md'
     'Board - CJMCU.md'
     'Board - Olimexino.md'
     'Board - ChebuzzF3.md'
+    'Cli.md'
 )
 
 if which gimli >/dev/null; then
@@ -52,6 +52,7 @@ if which gimli >/dev/null; then
 	for i in "${doc_files[@]}"
 	do
 		cat "$i" >> ${filename}.md
+		echo >> ${filename}.md
 	done
 	rm -f ${filename}.pdf
 	gimli -f ${filename}.md -stylesheet override.css \

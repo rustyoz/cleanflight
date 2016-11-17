@@ -58,13 +58,12 @@ If what you need is not covered, check the [Baseflight documentation](https://gi
 
 ## IRC Support and Developers Channel
 
-There's a dedicated Cleanflight IRC channel on the Freenode IRC network:
+There's a dedicated Cleanflight IRC channel on the Freenode IRC network. Many users and some of the developers frequent there, and it is a helpful and friendly community - but there are two important things to keep in mind: First and most importantly, please go ahead and ask if you have questions, but **make sure you wait around long enough for a reply**. Next, sometimes people are out flying, asleep or at work and can't answer immediately, even though they are present in the channel. This is how IRC works: Many people stay logged in, even though they are not actively participating in the discussion all the time. Have a seat, grab a drink and hang around if it's a quiet time of day.
 
 irc://irc.freenode.net/#cleanflight
 
 If you are using Windows and don't have an IRC client installed, take a look at [HydraIRC](http://hydrairc.com/).
 
-Etiquette: Don't ask to ask and please wait around long enough for a reply - sometimes people are out flying, asleep or at work and can't answer immediately.
 
 ## Videos
 
@@ -77,7 +76,7 @@ Please subscribe and '+1' the videos if you find them useful.
 ## Configuration Tool
 
 To configure Cleanflight you should use the [Cleanflight-configurator GUI tool](https://chrome.google.com/webstore/detail/cleanflight-configurator/enacoimjcgeinfnnnpajinjgmkahmfgb
-) (Windows/OSX/Linux) that can be found here:
+) (Windows/OSX/Linux).
 
 The source for it is here:
 
@@ -93,9 +92,11 @@ Contributions are welcome and encouraged.  You can contribute in many ways:
 * New features.
 * Telling us your ideas and suggestions.
 
-The best place to start is the IRC channel on freenode (see above), drop in, say hi. Next place is the github issue tracker:
+The best place to start is the IRC channel on freenode (see above), drop in, say hi.
+Next place is the github issue tracker:
 
 https://github.com/cleanflight/cleanflight/issues
+
 https://github.com/cleanflight/cleanflight-configurator/issues
 
 Before creating new issues please check to see if there is an existing one, search first otherwise you waste peoples time when they could be coding instead!

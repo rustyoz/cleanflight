@@ -29,6 +29,10 @@
 #define UART2_TX_BUFFER_SIZE    256
 #define UART3_RX_BUFFER_SIZE    256
 #define UART3_TX_BUFFER_SIZE    256
+#define UART4_RX_BUFFER_SIZE    256
+#define UART4_TX_BUFFER_SIZE    256
+#define UART5_RX_BUFFER_SIZE    256
+#define UART5_TX_BUFFER_SIZE    256
 
 typedef struct {
     serialPort_t port;
@@ -45,15 +49,20 @@ typedef struct {
     uint32_t txDMAPeripheralBaseAddr;
     uint32_t rxDMAPeripheralBaseAddr;
 
+    dmaCallbackHandler_t    dmaTxHandler;
+    dmaCallbackHandler_t    dmaRxHandler;
+
     USART_TypeDef *USARTx;
 } uartPort_t;
 
 serialPort_t *uartOpen(USART_TypeDef *USARTx, serialReceiveCallbackPtr callback, uint32_t baudRate, portMode_t mode, portOptions_t options);
 
+void usartInitAllIOSignals(void);
+
 // serialPort API
 void uartWrite(serialPort_t *instance, uint8_t ch);
-uint8_t uartTotalRxBytesWaiting(serialPort_t *instance);
-uint8_t uartTotalTxBytesFree(serialPort_t *instance);
+uint32_t uartTotalRxBytesWaiting(const serialPort_t *instance);
+uint8_t uartTotalTxBytesFree(const serialPort_t *instance);
 uint8_t uartRead(serialPort_t *instance);
 void uartSetBaudRate(serialPort_t *s, uint32_t baudRate);
-bool isUartTransmitBufferEmpty(serialPort_t *s);
+bool isUartTransmitBufferEmpty(const serialPort_t *s);
