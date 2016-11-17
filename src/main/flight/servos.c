@@ -590,7 +590,7 @@ void filterServos(void)
 }
 
 void servoTiltMixer(void) {
-	if (IS_RC_MODE_ACTIVE(BOXQUADTILT)) {
+	if (rcModeIsActive(BOXQUADTILT)) {
 		servoMixer(); // mix servos as per rules
 	} else {
         uint8_t i;
