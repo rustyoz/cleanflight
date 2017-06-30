@@ -405,14 +405,14 @@ static const uint16_t multiPWM[] = {
     PWM6  | (MAP_TO_PWM_INPUT << 8),
     PWM7  | (MAP_TO_PWM_INPUT << 8),
     PWM8  | (MAP_TO_PWM_INPUT << 8),
-    PWM16 | (MAP_TO_SERVO_OUTPUT  << 8),
-    PWM15 | (MAP_TO_MOTOR_OUTPUT  << 8),
-    PWM14 | (MAP_TO_SERVO_OUTPUT  << 8),
-    PWM13 | (MAP_TO_MOTOR_OUTPUT  << 8),
-    PWM12 | (MAP_TO_SERVO_OUTPUT  << 8),
-    PWM11 | (MAP_TO_MOTOR_OUTPUT  << 8),
-    PWM10 | (MAP_TO_SERVO_OUTPUT  << 8),
-    PWM9  | (MAP_TO_MOTOR_OUTPUT  << 8),
+    PWM10  | (MAP_TO_MOTOR_OUTPUT  << 8),
+    PWM12 | (MAP_TO_MOTOR_OUTPUT  << 8),
+    PWM14 | (MAP_TO_MOTOR_OUTPUT  << 8),
+    PWM16 | (MAP_TO_MOTOR_OUTPUT  << 8),
+    PWM9 | (MAP_TO_SERVO_OUTPUT  << 8),
+    PWM11 | (MAP_TO_SERVO_OUTPUT  << 8),
+    PWM13 | (MAP_TO_SERVO_OUTPUT  << 8),
+    PWM15 | (MAP_TO_SERVO_OUTPUT  << 8),
 
     0xFFFF
 };
@@ -898,10 +898,10 @@ pwmIOConfiguration_t *pwmInit(drv_pwm_config_t *init)
                 type = MAP_TO_SERVO_OUTPUT;
 #endif
 
-#if defined(SPRACINGF3)
-            if ((timerIndex == PWM15 || timerIndex == PWM16) && timerHardwarePtr->tim == TIM15)
-                type = MAP_TO_SERVO_OUTPUT;
-#endif
+//#if defined(SPRACINGF3)
+//            if ((timerIndex == PWM15 || timerIndex == PWM16) && timerHardwarePtr->tim == TIM15)
+//                type = MAP_TO_SERVO_OUTPUT;
+//#endif
 
 #if defined(SPRACINGF3MINI)
             if ((timerIndex == PWM6 || timerIndex == PWM7) && timerHardwarePtr->tim == TIM15)
@@ -948,11 +948,11 @@ pwmIOConfiguration_t *pwmInit(drv_pwm_config_t *init)
             } else
 #endif
 
-#if defined(SPRACINGF3) || defined(NAZE)
+/* #if defined(SPRACINGF3) || defined(NAZE)
                 // remap PWM5..8 as servos when used in extended servo mode
                 if (timerIndex >= PWM5 && timerIndex <= PWM8)
                     type = MAP_TO_SERVO_OUTPUT;
-#endif
+#endif */
 
 #if defined(SPRACINGF3EVO)
             if ((timerIndex == PWM6 || timerIndex == PWM7 || timerIndex == PWM8 || timerIndex == PWM9) && timerHardwarePtr->tim == TIM3) {

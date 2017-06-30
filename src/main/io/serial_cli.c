@@ -213,7 +213,7 @@ static const char * const mixerNames[] = {
     "FLYING_WING", "Y4", "HEX6X", "OCTOX8", "OCTOFLATP", "OCTOFLATX",
     "AIRPLANE", "HELI_120_CCPM", "HELI_90_DEG", "VTAIL4",
     "HEX6H", "PPM_TO_SERVO", "DUALCOPTER", "SINGLECOPTER",
-    "ATAIL4", "CUSTOM", "CUSTOMAIRPLANE", "CUSTOMTRI", NULL
+    "ATAIL4", "CUSTOM", "CUSTOMAIRPLANE", "CUSTOMTRI", "QUADTILT", NULL
 };
 #endif
 
@@ -672,7 +672,7 @@ const clivalue_t valueTable[] = {
     { "align_board_yaw",            VAR_INT16  | MASTER_VALUE, .config.minmax = { -180,  360 } , PG_BOARD_ALIGNMENT, offsetof(boardAlignment_t, yawDegrees)},
 
     { "small_angle",                VAR_UINT8  | MASTER_VALUE, .config.minmax = { 0,  180 } , PG_IMU_CONFIG, offsetof(imuConfig_t, small_angle)},
-    { "max_angle_inclination",      VAR_UINT16 | MASTER_VALUE, .config.minmax = { 100,  900 } , PG_IMU_CONFIG, offsetof(imuConfig_t, max_angle_inclination) },
+    { "max_angle_inclination",      VAR_UINT16 | MASTER_VALUE, .config.minmax = { 0,  900 } , PG_IMU_CONFIG, offsetof(imuConfig_t, max_angle_inclination) },
     { "pid_process_denom",          VAR_UINT8  | MASTER_VALUE, .config.minmax = { 1,  8 } , PG_GYRO_CONFIG, offsetof(gyroConfig_t, pid_process_denom)},
     { "gyro_sync",                  VAR_UINT8  | MASTER_VALUE, .config.minmax = { 0,  1 } , PG_GYRO_CONFIG, offsetof(gyroConfig_t, gyro_sync)},
     { "gyro_sample_hz",             VAR_UINT16 | MASTER_VALUE, .config.minmax = { 1000,  8000 } , PG_GYRO_CONFIG, offsetof(gyroConfig_t, gyro_sample_hz)},
